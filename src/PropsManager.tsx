@@ -33,9 +33,7 @@ const PropsManagerProvider = (props: PropsManagerProps) => {
 }
 
 const usePropsContext = () => {
-  const context = useContext<PropsManagerContextType | null>(
-    PropsManagerContext
-  )
+  const context = useContext(PropsManagerContext)
   if (context === undefined || context === null) {
     throw new Error('usePropsContext most be in a provider')
   }
