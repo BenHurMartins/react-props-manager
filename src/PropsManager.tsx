@@ -4,40 +4,46 @@ type PropsManagerActionType = { type: string; payload: object }
 
 type PropsManagerContextType = {
   state: any
-  dispatch?: React.Dispatch<PropsManagerActionType>
+  setProps: React.Dispatch<PropsManagerActionType>
 }
-const PropsManagerContext = createContext<PropsManagerContextType | null>({
-  state: {}
-})
 
-const PropsManagerReducer = (state: any, action: PropsManagerActionType) => {
-  switch (action.type) {
-    default: {
-      return { ...state, ...action.payload }
-    }
+export function createCtx<ContextType>(name: string) {
+  const ctx = createContext<ContextType | undefined>(undefined)
+  function useCtx() {
+    const c = useContext(ctx)
+    if (c === undefined)
+      throw new Error(`Hook used outside of the provider: ${name}`)
+    return c
   }
+  return [useCtx, ctx.Provider] as const
+}
+
+const [usePropsContext, PropsManagerContext] =
+  createCtx<PropsManagerContextType>('PropsManager')
+
+const PropsManagerReducer = (state: any, payload: object) => {
+  return { ...state, ...payload }
 }
 
 interface PropsManagerProps {
   children: React.ReactNode
+  propsValue: object
 }
 
-const PropsManagerProvider = (props: PropsManagerProps) => {
-  const [state, dispatch] = useReducer(PropsManagerReducer, {})
-  const value = { state, dispatch }
+const useProps = () => {
+  const [state, setProps] = useReducer(PropsManagerReducer, {})
+  return { state, setProps }
+}
+
+const PropsManagerProvider: React.FC = (props: PropsManagerProps) => {
+  const { state, setProps } = useProps()
+  const value = { state, setProps }
+  React.useEffect(() => {
+    setProps(props.propsValue)
+  }, [])
   return (
-    <PropsManagerContext.Provider value={value}>
-      {props.children}
-    </PropsManagerContext.Provider>
+    <PropsManagerContext value={value}>{props.children}</PropsManagerContext>
   )
-}
-
-const usePropsContext = () => {
-  const context = useContext(PropsManagerContext)
-  if (context === undefined || context === null) {
-    throw new Error('usePropsContext most be in a provider')
-  }
-  return context
 }
 
 export { PropsManagerProvider, usePropsContext }
