@@ -1,0 +1,28 @@
+colors {
+  --background: #14110f;
+  --green: #28666e;
+  --yellow: #fedc97;
+  --white: #fff8eb;
+}
+
+nav {
+  width: 60%;
+}
+
+ul {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  list-style-type: none;
+}
+
+li {
+  list-style-type: none;
+  appearance: none;
+}
+
+.link {
+  text-decoration: none;
+  color: var(--white);
+}

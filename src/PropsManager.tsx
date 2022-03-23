@@ -33,14 +33,10 @@ const PropsManagerReducer = (state: any, action: PropsManagerActionType) => {
   switch (action.type) {
     case Actions.RESET:
       return {}
-      break
     case Actions.UPDATE:
       return { ...state, ...action.payload }
-      break
-
     default:
       return state
-      break
   }
 }
 
