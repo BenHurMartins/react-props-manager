@@ -1,11 +1,14 @@
 import React, { createContext, useContext, useReducer } from 'react'
 
-type PropsManagerActionType = { type: string; payload: object }
+type PropsManagerActionType = { type: string; payload?: object }
 
 type PropsManagerContextType = {
   state: any
-  setProps: React.Dispatch<PropsManagerActionType>
+  getProps: (propsKey: string) => object
+  resetProps: () => void
+  updateProps: (payload: object) => void
 }
+// setProps?: React.Dispatch<PropsManagerActionType>
 
 export function createCtx<ContextType>(name: string) {
   const ctx = createContext<ContextType | undefined>(undefined)
@@ -21,8 +24,24 @@ export function createCtx<ContextType>(name: string) {
 const [usePropsContext, PropsManagerContext] =
   createCtx<PropsManagerContextType>('PropsManager')
 
-const PropsManagerReducer = (state: any, payload: object) => {
-  return { ...state, ...payload }
+const Actions = {
+  RESET: 'Reset',
+  UPDATE: 'Update'
+}
+
+const PropsManagerReducer = (state: any, action: PropsManagerActionType) => {
+  switch (action.type) {
+    case Actions.RESET:
+      return {}
+      break
+    case Actions.UPDATE:
+      return { ...state, ...action.payload }
+      break
+
+    default:
+      return state
+      break
+  }
 }
 
 interface PropsManagerProps {
@@ -37,9 +56,18 @@ const useProps = () => {
 
 const PropsManagerProvider: React.FC = (props: PropsManagerProps) => {
   const { state, setProps } = useProps()
-  const value = { state, setProps }
+
+  const getProps = (propsKey: string) => state[propsKey] ?? {}
+
+  const resetProps = () => setProps({ type: Actions.RESET })
+
+  const updateProps = (payload: object) =>
+    setProps({ type: Actions.UPDATE, payload: payload })
+
+  const value = { state, getProps, resetProps, updateProps }
+
   React.useEffect(() => {
-    setProps(props.propsValue)
+    setProps({ payload: props.propsValue, type: Actions.UPDATE })
   }, [])
   return (
     <PropsManagerContext value={value}>{props.children}</PropsManagerContext>
