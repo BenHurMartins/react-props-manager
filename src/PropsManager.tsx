@@ -44,7 +44,7 @@ const PropsManagerReducer = (state: any, action: PropsManagerActionType) => {
   }
 }
 
-interface PropsManagerProps {
+interface PropsManagerProviderProps {
   children: React.ReactNode
   propsValue: object
 }
@@ -54,7 +54,10 @@ const useProps = () => {
   return { state, setProps }
 }
 
-const PropsManagerProvider: React.FC = (props: PropsManagerProps) => {
+const PropsManagerProvider: React.FC<PropsManagerProviderProps> = ({
+  children,
+  propsValue
+}) => {
   const { state, setProps } = useProps()
 
   const getProps = (propsKey: string) => state[propsKey] ?? {}
@@ -67,11 +70,9 @@ const PropsManagerProvider: React.FC = (props: PropsManagerProps) => {
   const value = { state, getProps, resetProps, updateProps }
 
   React.useEffect(() => {
-    setProps({ payload: props.propsValue, type: Actions.UPDATE })
+    setProps({ payload: propsValue, type: Actions.UPDATE })
   }, [])
-  return (
-    <PropsManagerContext value={value}>{props.children}</PropsManagerContext>
-  )
+  return <PropsManagerContext value={value}>{children}</PropsManagerContext>
 }
 
 export { PropsManagerProvider, usePropsContext }
