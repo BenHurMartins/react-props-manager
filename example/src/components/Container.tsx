@@ -1,32 +1,33 @@
 import React from 'react'
 import { usePropsContext } from 'react-props-manager'
+import { ContainerManagedProps } from '../props'
 
 type ContainerProps = {
   children: React.ReactNode
   id: string
 }
 
-const styles = {
+const styles: Record<string, React.CSSProperties> = {
   container: {
+    display: 'flex',
     flex: 1,
-    padding: 60
+    flexGrow: 1,
+    padding: 5
   },
   contentContainer: {
+    display: 'flex',
+    flexDirection: 'column',
     flex: 1,
     padding: 10,
     backgroundColor: 'white'
   }
 }
 
-type ManagedProps = {
-  title: string
-  description: string
-  backgroundColor: string
-}
-
 const Container: React.FC<ContainerProps> = ({ children, id }) => {
   const { getProps } = usePropsContext()
-  const { backgroundColor, description, title } = getProps(id) as ManagedProps
+  const { backgroundColor, description, title } = getProps(
+    id
+  ) as ContainerManagedProps
 
   return (
     <div style={{ ...styles.container, backgroundColor: backgroundColor }}>
