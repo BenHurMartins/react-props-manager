@@ -4,17 +4,16 @@ import './HeaderMenu.css'
 const styles = {
   navContainer: {
     display: 'flex',
-    justifyContent: 'space-around',
-    alignItems: 'center'
-  }
+    justifyContent: 'flex-start'
+  } as React.CSSProperties
 }
 const HeaderMenu: React.FC = () => {
   return (
     <div style={styles.navContainer}>
       <nav>
-        <ul>
+        <ul className='header'>
           <li>
-            <Link className={'link'} to='/home'>
+            <Link className='link' to='/home'>
               Home
             </Link>
           </li>
