@@ -1,4 +1,4 @@
-name: 🚀 publish
+name: 🚀 update-package
 on:
   workflow_run:
     workflows: ['🔍 test']
@@ -7,7 +7,7 @@ on:
       - completed
 jobs:
   publish:
-    name: 🚀 publish
+    name: 🚀 update-package
     runs-on: ubuntu-latest
     steps:
       - name: ✅ checkout
@@ -19,7 +19,3 @@ jobs:
         with:
           github-token: ${{ secrets.GH_PERSONAL_ACCESS_TOKEN }}
           output-file: 'false'
-      - name: 🆙 publish
-        run: npm publish
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
