@@ -33,6 +33,6 @@ const component = (
 describe('PropsManagerProvider', () => {
   it('should show test value inside the component', () => {
     render(component)
-    expect(screen.getByText(/^some value/)).toBeTruthy()
+    expect(screen.getByText(/some value/)).toBeTruthy()
   })
 })
