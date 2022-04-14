@@ -17,9 +17,9 @@ jobs:
           registry-url: 'https://registry.npmjs.org'
       - name: ⚙️ install
         run: npm ci
-      - name: test
-        run: 🔍 npm test
-      - name: update version
+      - name: 🔍 test
+        run: npm test
+      - name: 🆙 update version
         run: npm version patch
       - name: 🚀 publish
         run: npm publish
