@@ -11,14 +11,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: ✅ checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           token: ${{ secrets.GH_PERSONAL_ACCESS_TOKEN }}
       - name: 🚀 bump
         uses: TriPSs/conventional-changelog-action@master
         with:
           github-token: ${{ secrets.GH_PERSONAL_ACCESS_TOKEN }}
-          git-message: 'chore(release): {version}'
-          preset: 'angular'
-          tag-prefix: ''
-          output-file: 'CHANGELOG.md'
+          output-file: 'false'
