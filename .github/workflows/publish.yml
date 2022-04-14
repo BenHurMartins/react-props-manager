@@ -1,27 +1,25 @@
-name: 🚀 publish
+name: '🚀 publish'
 on:
-  push:
-    branches:
-      - main
+  workflow_run:
+    workflows: ['🔍 test']
+    branches: [main]
+    types:
+      - completed
+
 jobs:
   publish:
     name: 🚀 publish
     runs-on: ubuntu-latest
     steps:
       - name: ✅ checkout
-        uses: actions/checkout@v2.1.1
-      - name: 💚 node
-        uses: actions/setup-node@v1
-        with:
-          node-version: 14
-          registry-url: 'https://registry.npmjs.org'
-      - name: ⚙️ install
-        run: npm ci
-      - name: 🔍 test
-        run: npm test
-      - name: 🆙 update version
-        run: npm version patch
-      - name: 🚀 publish
-        run: npm publish
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+    - uses: actions/checkout@v2
+      with:
+        token: ${{ secrets.GH_PERSONAL_ACCESS_TOKEN }}
+    - name: 
+      uses: TriPSs/conventional-changelog-action@master
+      with: 🚀 bump
+        github-token: ${{ secrets.GH_PERSONAL_ACCESS_TOKEN }}
+        git-message: 'chore(release): {version}'
+        preset: 'angular'
+        tag-prefix: ''
+        output-file: 'CHANGELOG.md'
