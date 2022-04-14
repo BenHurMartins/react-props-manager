@@ -1,11 +1,10 @@
-name: '🚀 publish'
+name: 🚀 publish
 on:
   workflow_run:
     workflows: ['🔍 test']
     branches: [main]
     types:
       - completed
-
 jobs:
   publish:
     name: 🚀 publish
