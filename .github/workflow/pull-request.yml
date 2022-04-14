@@ -1,0 +1,21 @@
+name: pull request
+on:
+  pull_request:
+    branches:
+      - main
+jobs:
+  publish:
+    name: pull request
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v2.1.1
+      - name: node
+        uses: actions/setup-node@v1
+        with:
+          node-version: 14
+          registry-url: 'https://registry.npmjs.org'
+      - name: install
+        run: npm ci
+      - name: test
+        run: npm test:unit

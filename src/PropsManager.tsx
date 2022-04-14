@@ -1,43 +1,12 @@
-import React, { createContext, useContext, useReducer } from 'react'
+import React, { useReducer } from 'react'
+import PropsManagerReducer, { Actions } from './PropsManagerReducer'
+import { contextFactory } from './utils'
 
-type PropsManagerActionType = { type: string; payload?: object }
-
-type PropsManagerContextType = {
+export type PropsManagerContextType = {
   state: any
   getProps: (propsKey: string) => object
   resetProps: () => void
   updateProps: (payload: object) => void
-}
-// setProps?: React.Dispatch<PropsManagerActionType>
-
-export function createCtx<ContextType>(name: string) {
-  const ctx = createContext<ContextType | undefined>(undefined)
-  function useCtx() {
-    const c = useContext(ctx)
-    if (c === undefined)
-      throw new Error(`Hook used outside of the provider: ${name}`)
-    return c
-  }
-  return [useCtx, ctx.Provider] as const
-}
-
-const [usePropsContext, PropsManagerContext] =
-  createCtx<PropsManagerContextType>('PropsManager')
-
-const Actions = {
-  RESET: 'Reset',
-  UPDATE: 'Update'
-}
-
-const PropsManagerReducer = (state: any, action: PropsManagerActionType) => {
-  switch (action.type) {
-    case Actions.RESET:
-      return {}
-    case Actions.UPDATE:
-      return { ...state, ...action.payload }
-    default:
-      return state
-  }
 }
 
 interface PropsManagerProviderProps {
@@ -45,16 +14,14 @@ interface PropsManagerProviderProps {
   propsValue: object
 }
 
-const useProps = () => {
-  const [state, setProps] = useReducer(PropsManagerReducer, {})
-  return { state, setProps }
-}
+const [usePropsContext, PropsManagerContext] =
+  contextFactory<PropsManagerContextType>('PropsManager')
 
 const PropsManagerProvider: React.FC<PropsManagerProviderProps> = ({
   children,
   propsValue
 }) => {
-  const { state, setProps } = useProps()
+  const [state, setProps] = useReducer(PropsManagerReducer, propsValue)
 
   const getProps = (propsKey: string) => state[propsKey] ?? {}
 
@@ -65,9 +32,6 @@ const PropsManagerProvider: React.FC<PropsManagerProviderProps> = ({
 
   const value = { state, getProps, resetProps, updateProps }
 
-  React.useEffect(() => {
-    setProps({ payload: propsValue, type: Actions.UPDATE })
-  }, [])
   return <PropsManagerContext value={value}>{children}</PropsManagerContext>
 }
 

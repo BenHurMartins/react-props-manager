@@ -1,0 +1,27 @@
+name: publish
+on:
+  push:
+    branches:
+      - main
+jobs:
+  publish:
+    name: publish
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v2.1.1
+      - name: node
+        uses: actions/setup-node@v1
+        with:
+          node-version: 14
+          registry-url: 'https://registry.npmjs.org'
+      - name: install
+        run: npm ci
+      - name: test
+        run: npm test:unit
+      - name: update version
+        run: npm version patch
+      - name: publish
+        run: npm publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
