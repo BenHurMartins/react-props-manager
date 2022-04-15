@@ -11,9 +11,9 @@ const Docs = () => {
     <Container id={'docs'}>
       <span>Docs content</span>
       <ul>
-        {links?.map(({ type, value }) => {
+        {links.map(({ type, value }, index) => {
           return (
-            <li>
+            <li key={index}>
               <a href={value}>{type}</a>
             </li>
           )

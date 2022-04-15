@@ -6,6 +6,7 @@ on:
     paths-ignore:
       - 'package.json'
       - 'CHANGELOG.md'
+      - '/example'
 jobs:
   publish:
     name: 🔍 test
